@@ -1,7 +1,7 @@
 import Header from './Header';
 import Content from './Content';
 import Footer from './Footer';
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import './App.css'; 
 import AddTask from './AddTask';
 import SearchTask from './SearchTask';
@@ -9,11 +9,12 @@ import SearchTask from './SearchTask';
 
 //Parrent Container
 function App() {
-  const [item, setItem] = useState(
-   
-    JSON.parse(localStorage.getItem('todo_list'))
-  );
+  const [item, setItem] = useState(JSON.parse(localStorage.getItem('todo_list')) || []);
   
+useEffect(() => {
+  JSON.parse(localStorage.getItem('todo_list'))
+},[] )
+
   const [newItem, setNewItem] = useState('')
   const [search, setSearch] = useState('')
 
@@ -63,10 +64,10 @@ function App() {
     <div className='App'>
        <Header title = "My ToDo's"/>
        
-      {/* <SearchTask
+      <SearchTask
        search = {search}
        setSearch = {setSearch}
-      /> */}
+      /> 
 
        <AddTask 
        newItem = {newItem}
@@ -75,7 +76,7 @@ function App() {
        />
 
        <Content                 
-        item = {item}
+        item = {item.filter(task => ((task.task).toLowerCase()).includes(search.toLowerCase()))}
         handleCheck={handleCheck}
         deleteTask={deleteTask}
        />

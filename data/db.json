@@ -1,0 +1,21 @@
+{
+ "items":[
+    {
+        "id": 1, 
+        "checked": false, 
+        "task": "python"
+    },
+
+    {
+        "id": 2, 
+        "checked": false, 
+        "task": "CSS"
+    },
+
+    {
+        "id": 3, 
+        "checked": false, 
+        "task": "React"
+    }
+]
+}
