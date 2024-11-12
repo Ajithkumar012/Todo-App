@@ -9,11 +9,36 @@ import SearchTask from './SearchTask';
 
 //Parrent Container
 function App() {
-  const [item, setItem] = useState(JSON.parse(localStorage.getItem('todo_list')) || []);
-  
+  const [item, setItem] = useState([]);
+  const API_URL = "http://localhost:3500/items"
+  const [fetchError, setFetchError] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+
 useEffect(() => {
-  JSON.parse(localStorage.getItem('todo_list'))
+  const fetchItems = async () =>{
+    try{
+      const response = await fetch(API_URL)
+      if (!response.ok) throw Error("Data Not Received");
+      const listItems = await response.json()
+      console.log(listItems)
+      setItem(listItems)
+      setFetchError(null)
+    }
+    catch(err){
+      setFetchError(err.message)
+    }
+    finally{   //if No problem is Occurs finally will executes
+      setIsLoading(false)
+    }
+  }
+  setTimeout(() =>{
+    (async () => await fetchItems())()
+  }, 2000)
+  
+  
 },[] )
+
+
 
   const [newItem, setNewItem] = useState('')
   const [search, setSearch] = useState('')
@@ -42,8 +67,6 @@ useEffect(() => {
     item.id!==id )
     console.log(listItems)
     setItems(listItems)
-  
-    
   }
 
   const handleSubmit =(e) =>{
@@ -75,11 +98,16 @@ useEffect(() => {
        handleSubmit = {handleSubmit}
        />
 
-       <Content                 
-        item = {item.filter(task => ((task.task).toLowerCase()).includes(search.toLowerCase()))}
-        handleCheck={handleCheck}
-        deleteTask={deleteTask}
-       />
+      <main >
+        {isLoading && <p>{`Loading Tasks.....`}</p>}
+      {fetchError && !fetchError && <p>{`Error: ${fetchError}`}</p>}
+        {!isLoading && <Content                 
+          item = {item.filter(task => ((task.task).toLowerCase()).includes(search.toLowerCase()))}
+          handleCheck={handleCheck}
+          deleteTask={deleteTask}
+        />}
+      </main>
+       
        
        <Footer 
        itemLength={item.length}
@@ -88,7 +116,5 @@ useEffect(() => {
    );
 }
   
-  
-
 
 export default App;

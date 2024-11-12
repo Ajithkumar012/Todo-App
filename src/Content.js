@@ -5,7 +5,8 @@ import ItemList from './ItemList'
 const Content = ({item, handleCheck, deleteTask}) => {
   
   return (
-    <main >
+    // Fragments
+    <> 
       {(item.length) ? (
         <ItemList
 
@@ -17,7 +18,7 @@ const Content = ({item, handleCheck, deleteTask}) => {
      
       ) : <p style={{color:"red", display:'flex', justifyContent:'center', alignItems :'center'}}>Your Task is Empty</p>}
 
-    </main>
+    </>
   )
 }
 
