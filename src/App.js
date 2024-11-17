@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import './App.css'; 
 import AddTask from './AddTask';
 import SearchTask from './SearchTask';
-
+import apiRequest from './apiRequest';
 
 //Parrent Container
 function App() {
@@ -48,18 +48,41 @@ useEffect(() => {
     localStorage.setItem("todo_list", JSON.stringify(listItems))
   }
 
-  const addTasks = (task) => {
+  const addTasks = async (task) => {
     const id = item.length ? item[item.length - 1].id + 1 : 1
     const addNewTask = {id, checked:false, task}
     const listItems = [...item, addNewTask]
     setItems(listItems)
+
+    const postOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(addNewTask)
+    }
+    const result = await apiRequest(API_URL, postOptions)
+    if(result) setFetchError(result)
   }
 
-  const handleCheck = (id)=>{
+  const handleCheck = async (id)=>{
     const listItems = item.map((item) => 
     item.id===id ? {...item, checked: !item.checked} : item)
     setItems(listItems)
-  
+
+    const myItem = listItems.filter((item) => 
+      item.id === id
+    )
+    const updateOptions = {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({checked:myItem[0].checked})
+    }
+    const reqUrl = `${API_URL}/${id}`
+    const result = await apiRequest(reqUrl, updateOptions)
+    if(result) setFetchError(result)
   }
 
   const deleteTask = (id) =>{
