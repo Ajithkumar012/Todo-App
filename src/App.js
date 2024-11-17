@@ -85,11 +85,17 @@ useEffect(() => {
     if(result) setFetchError(result)
   }
 
-  const deleteTask = (id) =>{
+  const deleteTask = async (id) =>{
     const listItems = item.filter((item) => 
     item.id!==id )
     console.log(listItems)
     setItems(listItems)
+    const deleteOption = {
+      method: 'DELETE'
+    }
+    const reqUrl = `${API_URL}/${id}`
+    const result = await apiRequest(reqUrl, deleteOption)
+    if(result) setFetchError(result)
   }
 
   const handleSubmit =(e) =>{
