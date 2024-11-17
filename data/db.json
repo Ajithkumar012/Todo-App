@@ -17,8 +17,13 @@
     },
     {
       "id": "31",
-      "checked": false,
+      "checked": true,
       "task": "Git Hub"
+    },
+    {
+      "id": "311",
+      "checked": false,
+      "task": "Redux"
     }
   ]
 }
